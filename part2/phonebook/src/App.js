@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Persons from './components/Persons';
 import FormInput from './components/FormInput';
 import Search from './components/Search';
+import Notification from './components/Notification';
 import PersonsService from './services/persons';
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [newSearch, setSearch] = useState('');
-
+  const [message, setMessage] = useState('');
   useEffect(() => {
     PersonsService.getAll().then((personData) => setPersons(personData));
   }, []);
@@ -43,8 +44,8 @@ const App = () => {
           ...personObject,
           phoneNumber: newPhoneNumber,
         };
-        PersonsService.update(personObject.id, newPersonObject).then(
-          (responseData) => {
+        PersonsService.update(personObject.id, newPersonObject)
+          .then((responseData) => {
             setPersons(
               persons.map((p) =>
                 p.id !== newPersonObject.id ? p : responseData
@@ -52,21 +53,41 @@ const App = () => {
             );
             setNewName('');
             setNewPhoneNumber('');
-          }
-        );
-        return false;
+            setMessage(`${responseData.name} was succesfully replaced`);
+            setTimeout(() => {
+              setMessage('');
+            }, 2000);
+          })
+          .catch((error) => {
+            setMessage(`${error.responseData.data.error}`);
+            setTimeout(() => {
+              setMessage('');
+            }, 2000);
+          });
       }
+      return false;
     } else {
       const newPersonObject = {
         name: newName,
         phoneNumber: newPhoneNumber,
       };
 
-      PersonsService.create(newPersonObject).then((responseData) => {
-        setPersons(persons.concat(responseData));
-        setNewName('');
-        setNewPhoneNumber('');
-      });
+      PersonsService.create(newPersonObject)
+        .then((responseData) => {
+          setPersons(persons.concat(responseData));
+          setNewName('');
+          setNewPhoneNumber('');
+          setMessage(`${responseData.name} was succesfully added`);
+          setTimeout(() => {
+            setMessage('');
+          }, 2000);
+        })
+        .catch((error) => {
+          setMessage(`${error.responseData.data.error}`);
+          setTimeout(() => {
+            setMessage('');
+          }, 2000);
+        });
     }
   }
 
@@ -75,16 +96,27 @@ const App = () => {
     if (
       window.confirm(`Are you sure you want to delete ${person.name}?`) === true
     ) {
-      PersonsService.remove(person.id).then((status) => {
-        console.log(status);
-        setPersons(persons.filter((p) => p.id !== id));
-      });
+      PersonsService.remove(person.id)
+        .then((status) => {
+          setPersons(persons.filter((p) => p.id !== id));
+          setMessage(`${person.name} was succesfully removed`);
+          setTimeout(() => {
+            setMessage('');
+          }, 2000);
+        })
+        .catch((error) => {
+          setMessage(`${error.responseData.data.error}`);
+          setTimeout(() => {
+            setMessage('');
+          }, 2000);
+        });
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Search newSearch={newSearch} handleSearch={handleSearch} />
       <h2>Add a new</h2>
       <FormInput

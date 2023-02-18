@@ -1,14 +1,14 @@
-const Person = ({ name, phoneNumber }) => {
+const Person = ({ name, phoneNumber, deleteButton }) => {
   return (
     <>
       <li>
-        {name} {phoneNumber}
+        {name} {phoneNumber} <button onClick={deleteButton}>Delete</button>
       </li>
     </>
   );
 };
 
-const Persons = ({ persons, newSearch }) => {
+const Persons = ({ persons, newSearch, onClick }) => {
   return (
     <>
       <ul>
@@ -19,6 +19,9 @@ const Persons = ({ persons, newSearch }) => {
               key={person.id}
               name={person.name}
               phoneNumber={person.phoneNumber}
+              deleteButton={() => {
+                onClick(person.id);
+              }}
             />
           ))}
       </ul>

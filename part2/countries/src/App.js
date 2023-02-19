@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Search from './components/Search';
 import Countries from './components/Countries';
 import CountriesService from './services/countries';
+
 const App = () => {
   const [countries, setCountries] = useState(null);
   const [searchInput, setSearchInput] = useState('');
@@ -17,7 +18,9 @@ const App = () => {
     setSearchInput(event.target.value);
   };
 
-  const handleShowButton = (country) => {};
+  const handleShowButton = (country) => {
+    setSearchInput(country.name.official);
+  };
 
   return (
     <div>
@@ -25,7 +28,7 @@ const App = () => {
       <Countries
         countries={countries}
         searched={searchInput}
-        showButton={handleShowButton}
+        handleShowButton={handleShowButton}
       />
     </div>
   );

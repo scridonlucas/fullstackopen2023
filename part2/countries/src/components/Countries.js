@@ -1,19 +1,4 @@
-const Country = ({ country }) => {
-  return (
-    <div>
-      <h2>{country.name.official}</h2>
-      <p>capital: {country.capital}</p>
-      <p>area: {country.area}</p>
-      <h3>langagues</h3>
-      <ul>
-        {Object.values(country.languages).map((languague) => (
-          <li key={languague}>{languague}</li>
-        ))}
-      </ul>
-      <img src={country.flags.png} alt="" />
-    </div>
-  );
-};
+import Country from './Country';
 
 const Countries = ({ countries, searched, handleShowButton }) => {
   if (searched === '') {
@@ -21,7 +6,7 @@ const Countries = ({ countries, searched, handleShowButton }) => {
   }
 
   const filteredCountries = countries.filter((country) =>
-    country.name.official.toLowerCase().includes(searched)
+    country.name.official.toLowerCase().includes(searched.toLowerCase())
   );
 
   if (filteredCountries.length > 10) {

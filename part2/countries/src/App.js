@@ -5,7 +5,7 @@ import CountriesService from './services/countries';
 
 const App = () => {
   const [countries, setCountries] = useState(null);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState('Romania');
 
   useEffect(() => {
     CountriesService.getAll().then((countries) => setCountries(countries));
@@ -23,13 +23,20 @@ const App = () => {
   };
 
   return (
-    <div>
-      <Search searchInput={searchInput} handleSearchInput={handleSearchInput} />
-      <Countries
-        countries={countries}
-        searched={searchInput}
-        handleShowButton={handleShowButton}
-      />
+    <div className="container">
+      <div className="search">
+        <Search
+          searchInput={searchInput}
+          handleSearchInput={handleSearchInput}
+        />
+      </div>
+      <div className="countries">
+        <Countries
+          countries={countries}
+          searched={searchInput}
+          handleShowButton={handleShowButton}
+        />
+      </div>
     </div>
   );
 };

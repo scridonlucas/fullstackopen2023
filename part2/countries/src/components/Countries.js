@@ -10,7 +10,7 @@ const Countries = ({ countries, searched, handleShowButton }) => {
   );
 
   if (filteredCountries.length > 10) {
-    return <div>Too many matches, specify another filter</div>;
+    return <p>Too many matches, specify another filter</p>;
   }
 
   if (filteredCountries.length === 1) {

@@ -7,7 +7,7 @@ import Notification from './components/Notification';
 import PersonsService from './services/persons';
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState(null);
   const [newName, setNewName] = useState('');
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [newSearch, setSearch] = useState('');
@@ -15,6 +15,10 @@ const App = () => {
   useEffect(() => {
     PersonsService.getAll().then((personData) => setPersons(personData));
   }, []);
+
+  if (!persons) {
+    return null;
+  }
 
   function handleNameChange(event) {
     setNewName(event.target.value);
@@ -65,7 +69,6 @@ const App = () => {
             }, 2000);
           });
       }
-      return false;
     } else {
       const newPersonObject = {
         name: newName,
